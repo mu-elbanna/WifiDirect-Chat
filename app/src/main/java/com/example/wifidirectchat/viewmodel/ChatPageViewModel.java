@@ -161,7 +161,7 @@ public class ChatPageViewModel extends AndroidViewModel {
     public void connectToPeer(WifiP2pDevice device) {
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = device.deviceAddress;
-        wifiP2pManager.connect(channel, config, new WifiP2pManager.ActionListener() {
+        wifiP2pManager.createGroup(channel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
                 Log.d("", "connection success");

@@ -36,6 +36,7 @@ public class ChatActivity extends AppCompatActivity {
     private String addressee;
     private String startDate;
     private boolean isOffline;
+    final WifiP2pDevice selectedItems = new WifiP2pDevice();
     private ChatPageViewModel model;
     private ConstraintLayout loadingScreen;
     private ConstraintLayout messengerLayout;
@@ -100,18 +101,39 @@ public class ChatActivity extends AppCompatActivity {
                     if (peers.size() == 0)
                         return;
                     CharSequence[] items = new CharSequence[peers.size()];
+                    final boolean[] checkedItems= new boolean[peers.size()];
                     int i = 0;
                     for (WifiP2pDevice wifiP2pDevice : peers) {
                         items[i] = wifiP2pDevice.deviceName;
                         i++;
                     }
-                    adb.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
+                    adb.setMultiChoiceItems(items,checkedItems,new DialogInterface.OnMultiChoiceClickListener(){
+                        @Override
+                        public void onClick(DialogInterface dialogInterface, int which, boolean isChecked) {
+
+                            checkedItems[which]=isChecked;
+
+                        }
+                    });
+                    /*adb.setSingleChoiceItems(items, 0, new DialogInterface.OnClickListener() {
                         @Override
                         public void onClick(DialogInterface d, int n) {
-                            model.connectToPeer(peers.get(n));
-                            d.cancel();
+
                         }
 
+                    });*/
+                    adb.setPositiveButton("Connect", new DialogInterface.OnClickListener() {
+                        @Override
+                        public void onClick(DialogInterface dialog, int id) {
+
+                            for (int i = 0; i < checkedItems.length; i++) {
+                                boolean checked = checkedItems[i];
+                                if (checked) {
+                                    model.connectToPeer(peers.get(i));
+                                    dialog.cancel();
+                                }
+                            }
+                        }
                     });
                     adb.setNegativeButton("Cancel", null);
                     adb.setTitle("Which one?");
