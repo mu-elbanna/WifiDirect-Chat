@@ -3,6 +3,11 @@
     package="com.example.wifidirectchat">
 
     <uses-permission
+        android:name="android.permission.WRITE_SETTINGS"
+        android:required="true"
+        />
+
+    <uses-permission
         android:name="android.permission.ACCESS_FINE_LOCATION"
         android:required="true" />
     <uses-permission

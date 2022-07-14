@@ -67,11 +67,11 @@ public class ChatPageViewModel extends AndroidViewModel {
 
                 Log.d("new connection", info.toString());
                 final InetAddress address = info.groupOwnerAddress;
-                if (info.groupFormed && info.isGroupOwner) {
+                if (info.groupFormed&&info.isGroupOwner) {
                     Server server = new Server(ChatPageViewModel.this, chatIsReady);
                     server.start();
                     messenger = server;
-                } else if(info.isGroupOwner){
+                } else if (info.groupFormed){
                     Client client = new Client(address.getHostAddress(), ChatPageViewModel.this, chatIsReady);
                     client.start();
                     messenger = client;

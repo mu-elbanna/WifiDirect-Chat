@@ -5,10 +5,12 @@ import android.arch.lifecycle.Observer;
 import android.arch.lifecycle.ViewModelProviders;
 import android.content.Context;
 import android.content.DialogInterface;
+import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.location.LocationManager;
 import android.net.wifi.WifiManager;
 import android.os.Bundle;
+import android.provider.Settings;
 import android.support.annotation.NonNull;
 import android.support.annotation.Nullable;
 import android.support.design.widget.NavigationView;
@@ -39,6 +41,8 @@ public class MainActivity extends AppCompatActivity {
     private Button clearHistoryButton;
     private TextView emptyPageMessage;
 
+
+
     private RecyclerView chatHistoryView;
     private ChatListAdapter historyAdapter;
 
@@ -49,6 +53,7 @@ public class MainActivity extends AppCompatActivity {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_main);
         setUpGPS();
+        setUpWriteSettings();
         setUpDrawer();
         setUpHistoryPage();
         setUpViewModel();
@@ -82,6 +87,19 @@ public class MainActivity extends AppCompatActivity {
         });
     }
 
+    public void setUpWriteSettings() {
+        boolean writeSettings = false;
+        if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+            writeSettings = Settings.System.canWrite(this);
+        }
+        if (!writeSettings) {
+            Intent intent = null;
+            if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.M) {
+                intent = new Intent(Settings.ACTION_MANAGE_WRITE_SETTINGS);
+            }
+            startActivity(intent);
+        }
+    }
     public void setUpGPS() {
         if (ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_FINE_LOCATION) != PackageManager.PERMISSION_GRANTED &&
                 ActivityCompat.checkSelfPermission(this, Manifest.permission.ACCESS_COARSE_LOCATION) != PackageManager.PERMISSION_GRANTED) {

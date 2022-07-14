@@ -71,7 +71,6 @@ public class ChatActivity extends AppCompatActivity {
             model.chatIsReady().observe(this, new Observer<Boolean>() {
                 @Override
                 public void onChanged(@Nullable Boolean aBoolean) {
-                    if (aBoolean != null && aBoolean) {
                         loadingScreen.setVisibility(View.GONE);
                         messengerLayout.setVisibility(View.VISIBLE);
                         Objects.requireNonNull(getSupportActionBar()).show();
@@ -86,7 +85,6 @@ public class ChatActivity extends AppCompatActivity {
                                 adapter.updateData(messageEntities);
                             }
                         });
-                    }
                 }
             });
 
