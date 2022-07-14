@@ -67,11 +67,11 @@ public class ChatPageViewModel extends AndroidViewModel {
 
                 Log.d("new connection", info.toString());
                 final InetAddress address = info.groupOwnerAddress;
-                if (info.isGroupOwner) {
+                if (info.groupFormed && info.isGroupOwner) {
                     Server server = new Server(ChatPageViewModel.this, chatIsReady);
                     server.start();
                     messenger = server;
-                } else {
+                } else if(info.isGroupOwner){
                     Client client = new Client(address.getHostAddress(), ChatPageViewModel.this, chatIsReady);
                     client.start();
                     messenger = client;
@@ -161,7 +161,7 @@ public class ChatPageViewModel extends AndroidViewModel {
     public void connectToPeer(WifiP2pDevice device) {
         WifiP2pConfig config = new WifiP2pConfig();
         config.deviceAddress = device.deviceAddress;
-        wifiP2pManager.connect(channel, config, new WifiP2pManager.ActionListener() {
+        wifiP2pManager.createGroup(channel, new WifiP2pManager.ActionListener() {
             @Override
             public void onSuccess() {
                 Log.d("", "connection success");
